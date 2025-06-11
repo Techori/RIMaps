@@ -46,7 +46,8 @@ class RateLimiter {
             legacyHeaders: false, // Disable the `X-RateLimit-*` headers
             keyGenerator: (req) => {
                 // Use client ID if available, otherwise use IP
-                return req.client ? req.client._id.toString() : req.ip;
+                const clientId = req.client && req.client._id ? req.client._id.toString() : null;
+                return clientId || req.ip;
             }
         };
 

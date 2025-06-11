@@ -8,10 +8,6 @@ const logger = require('./utils/logger');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 
-// Import routes
-const geocodeRoutes = require('./routes/geocode');
-const directionsRoutes = require('./routes/directions');
-
 // Create Express app
 const app = express();
 
@@ -28,10 +24,6 @@ app.use(globalLimiter);
 
 // Serve Swagger API docs
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// Apply routes
-app.use('/api/geocode', geocodeRoutes);
-app.use('/api/directions', directionsRoutes);
 
 // Error handling middleware
 app.use(errorHandler);

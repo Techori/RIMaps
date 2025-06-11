@@ -2,8 +2,15 @@ const { ApiError } = require('./errorHandler');
 const Client = require('../models/Client');
 const QuotaUsage = require('../models/QuotaUsage');
 
+const publicRoutes = ['/api/clients/register', '/api/clients/login', '/api/clients/generate-key'];
+        
 const authenticateApiKey = async (req, res, next) => {
     try {
+        // Skip authentication for public routes
+        if (publicRoutes.some(route => req.path.startsWith(route))) {
+            return next();
+        }
+
         // Get API key from header
         const apiKey = req.headers['x-api-key'];
         

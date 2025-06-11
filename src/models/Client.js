@@ -14,10 +14,14 @@ const clientSchema = new mongoose.Schema({
         trim: true,
         lowercase: true
     },
+    password: {
+        type: String,
+        required: true
+    },
     apiKey: {
         type: String,
-        required: true,
-        unique: true
+        unique: true,
+        default: () => crypto.randomBytes(32).toString('hex')
     },
     plan: {
         type: String,
@@ -54,18 +58,10 @@ const clientSchema = new mongoose.Schema({
     },
     allowedProviders: [{
         type: String,
-        enum: ['google', 'mapbox', 'osm', 'mapple']
+        enum: ['google', 'mapbox', 'osm', 'mappls']
     }]
 }, {
     timestamps: true
-});
-
-// Generate API key before saving
-clientSchema.pre('save', function(next) {
-    if (!this.apiKey) {
-        this.apiKey = crypto.randomBytes(32).toString('hex');
-    }
-    next();
 });
 
 // Method to check if client has exceeded quota

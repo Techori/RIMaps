@@ -14,18 +14,18 @@ X-API-Key: your_api_key_here
 GET http://localhost:3000/api/directions/modes?provider=google
 X-API-Key: your_api_key_here
 
-### Register a new user
-POST http://localhost:3000/api/users/register
+### Register a new client
+POST http://localhost:3000/api/clients/register
 Content-Type: application/json
 
 {
-  "name": "Test User",
+  "name": "Test Client",
   "email": "test@example.com",
   "password": "test123"
 }
 
 ### Login
-POST http://localhost:3000/api/users/login
+POST http://localhost:3000/api/clients/login
 Content-Type: application/json
 
 {
@@ -34,7 +34,7 @@ Content-Type: application/json
 }
 
 ### Generate API Key
-POST http://localhost:3000/api/users/generate-key
+POST http://localhost:3000/api/clients/generate-key
 Content-Type: application/json
 
 {
@@ -42,20 +42,60 @@ Content-Type: application/json
   "password": "test123"
 }
 
-### Get user profile
-GET http://localhost:3000/api/users/profile
-X-API-Key: your-api-key-here
+### Get client profile
+GET http://localhost:3000/api/clients/profile
+X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
 
-### Update user profile
-PUT http://localhost:3000/api/users/profile
+### Update client profile
+PUT http://localhost:3000/api/clients/profile
 Content-Type: application/json
-X-API-Key: your-api-key-here
+X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
 
 {
   "name": "Updated Name",
-  "allowedProviders": ["google", "mapbox"]
+  "allowedProviders": ["google", "mapbox", "osm", "mappls"]
 }
 
-### Delete user account
-DELETE http://localhost:3000/api/users/profile
-X-API-Key: your-api-key-here 
+### Delete client account
+DELETE http://localhost:3000/api/clients/profile
+X-API-Key: your-api-key-here
+
+### Mapbox Geocode
+GET http://localhost:3000/api/geocode?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&provider=mapbox
+X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
+
+### Mapbox Reverse Geocode
+GET http://localhost:3000/api/geocode/reverse?lat=37.4224764&lng=-122.0842499&provider=mapbox
+X-API-Key: your_api_key_here
+
+### Mapbox Directions
+GET http://localhost:3000/api/directions?origin=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA&mode=driving&provider=mapbox
+X-API-Key: your_api_key_here
+
+### OpenStreetMap Geocode
+GET http://localhost:3000/api/geocode?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&provider=osm
+X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
+
+### OpenStreetMap Reverse Geocode
+GET http://localhost:3000/api/geocode/reverse?lat=38.4224764&lng=-122.0842499&provider=osm
+X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
+
+### OpenStreetMap Directions
+GET http://localhost:3000/api/directions?origin=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA&mode=driving&provider=osm
+X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
+
+### Mappls (MapmyIndia) Geocode
+GET http://localhost:3000/api/geocode?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&provider=mappls
+X-API-Key: your_api_key_here
+
+### Mappls (MapmyIndia) Reverse Geocode
+GET http://localhost:3000/api/geocode/reverse?lat=37.4224764&lng=-122.0842499&provider=mappls
+X-API-Key: your_api_key_here
+
+### Mappls (MapmyIndia) Directions
+GET http://localhost:3000/api/directions?origin=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA&mode=driving&provider=mappls
+X-API-Key: your_api_key_here
+
+### Get Available Providers
+GET http://localhost:3000/api/providers
+X-API-Key: your_api_key_here 
