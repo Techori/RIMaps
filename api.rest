@@ -1,0 +1,61 @@
+### Geocode (address to coordinates)
+GET http://localhost:3000/api/geocode?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&provider=google
+X-API-Key: your_api_key_here
+
+### Reverse Geocode (coordinates to address)
+GET http://localhost:3000/api/geocode/reverse?lat=37.4224764&lng=-122.0842499&provider=google
+X-API-Key: your_api_key_here
+
+### Get Directions
+GET http://localhost:3000/api/directions?origin=1600+Amphitheatre+Parkway,+Mountain+View,+CA&destination=1+Infinite+Loop,+Cupertino,+CA&mode=driving&provider=google
+X-API-Key: your_api_key_here
+
+### Get Available Travel Modes
+GET http://localhost:3000/api/directions/modes?provider=google
+X-API-Key: your_api_key_here
+
+### Register a new user
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "test123"
+}
+
+### Login
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "test123"
+}
+
+### Generate API Key
+POST http://localhost:3000/api/users/generate-key
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "test123"
+}
+
+### Get user profile
+GET http://localhost:3000/api/users/profile
+X-API-Key: your-api-key-here
+
+### Update user profile
+PUT http://localhost:3000/api/users/profile
+Content-Type: application/json
+X-API-Key: your-api-key-here
+
+{
+  "name": "Updated Name",
+  "allowedProviders": ["google", "mapbox"]
+}
+
+### Delete user account
+DELETE http://localhost:3000/api/users/profile
+X-API-Key: your-api-key-here 
