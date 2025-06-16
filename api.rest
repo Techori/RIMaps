@@ -53,7 +53,7 @@ X-API-Key: 56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97
 
 {
   "name": "Updated Name",
-  "allowedProviders": ["google", "mapbox", "osm", "mappls"]
+  "allowedProviders": ["google", "mapbox", "mappls"]
 }
 
 ### Delete client account

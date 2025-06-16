@@ -18,12 +18,27 @@ class ClientController {
                 throw new ApiError(400, 'Client already exists');
             }
 
+            // Validate allowed providers
+            const validProviders = ['google', 'mapbox', 'osm'];
+            if (allowedProviders) {
+                if (!Array.isArray(allowedProviders)) {
+                    throw new ApiError(400, 'Allowed providers must be an array');
+                }
+                if (!allowedProviders.every(provider => validProviders.includes(provider))) {
+                    throw new ApiError(400, `Invalid provider in allowed providers. Must be one of: ${validProviders.join(', ')}`);
+                }
+            }
+
+            // Generate API key
+            const apiKey = crypto.randomBytes(32).toString('hex');
+
             // Create new client
             const client = new Client({
                 name,
                 email,
                 password, // Note: In a real app, hash the password
-                allowedProviders: allowedProviders || ['google', 'mapbox', 'osm', 'mappls']
+                apiKey,
+                allowedProviders: allowedProviders || ['google']
             });
 
             await client.save();
@@ -34,7 +49,8 @@ class ClientController {
                 data: {
                     name: client.name,
                     email: client.email,
-                    apiKey: client.apiKey
+                    apiKey: client.apiKey,
+                    allowedProviders: client.allowedProviders
                 },
                 timestamp: new Date().toISOString()
             });
@@ -158,6 +174,22 @@ class ClientController {
             }
 
             const { name, email, allowedProviders } = req.body;
+
+            // Validate allowed providers if provided
+            if (allowedProviders) {
+                const validProviders = ['google', 'mapbox', 'osm'];
+                if (!Array.isArray(allowedProviders)) {
+                    throw new ApiError(400, 'Allowed providers must be an array');
+                }
+                if (!allowedProviders.every(provider => validProviders.includes(provider))) {
+                    throw new ApiError(400, `Invalid provider in allowed providers. Must be one of: ${validProviders.join(', ')}`);
+                }
+                if (allowedProviders.length === 0) {
+                    throw new ApiError(400, 'At least one provider must be allowed');
+                }
+            }
+
+            // Update client fields
             if (name) client.name = name;
             if (email) client.email = email;
             if (allowedProviders) client.allowedProviders = allowedProviders;
@@ -170,9 +202,6 @@ class ClientController {
                 data: {
                     name: client.name,
                     email: client.email,
-                    plan: client.plan,
-                    quota: client.quota,
-                    usage: client.usage,
                     allowedProviders: client.allowedProviders
                 },
                 timestamp: new Date().toISOString()

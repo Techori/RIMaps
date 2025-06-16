@@ -20,8 +20,8 @@ const clientSchema = new mongoose.Schema({
     },
     apiKey: {
         type: String,
-        unique: true,
-        default: () => crypto.randomBytes(32).toString('hex')
+        required: true,
+        unique: true
     },
     plan: {
         type: String,
@@ -56,10 +56,26 @@ const clientSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
-    allowedProviders: [{
-        type: String,
-        enum: ['google', 'mapbox', 'osm', 'mappls']
-    }]
+    allowedProviders: {
+        type: [String],
+        required: true,
+        default: ['google'],
+        validate: {
+            validator: function(providers) {
+                const validProviders = ['google', 'mapbox', 'osm'];
+                return providers.every(provider => validProviders.includes(provider));
+            },
+            message: 'Invalid provider in allowed providers. Must be one of: google, mapbox, osm'
+        }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    }
 }, {
     timestamps: true
 });
@@ -90,6 +106,20 @@ clientSchema.methods.incrementUsage = async function() {
     this.usage.monthly += 1;
     await this.save();
 };
+
+// Update the updatedAt timestamp before saving
+clientSchema.pre('save', function(next) {
+    this.updatedAt = Date.now();
+    next();
+});
+
+// Ensure at least one provider is always set
+clientSchema.pre('save', function(next) {
+    if (!this.allowedProviders || this.allowedProviders.length === 0) {
+        this.allowedProviders = ['google'];
+    }
+    next();
+});
 
 const Client = mongoose.model('Client', clientSchema);
 

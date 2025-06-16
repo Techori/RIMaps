@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiMaps - Map View</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="search-section">
+                <h2>Search Location</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Enter location...">
+                    <button id="searchButton">Search</button>
+                </div>
+                <div id="locationDetails"></div>
+            </div>
+
+            <div class="directions-section">
+                <h2>Get Directions</h2>
+                <button id="getDirections">Get Directions</button>
+                <div id="directionsInfo" style="display: none;">
+                    <div id="directionsDetails"></div>
+                </div>
+            </div>
+
+            <div class="nearby-section">
+                <h2>Search Nearby</h2>
+                <button id="searchNearby">Search Nearby Places</button>
+            </div>
+
+            <div class="selected-location-section">
+                <h2>Selected Location</h2>
+                <div id="selectedLocationInfo"></div>
+            </div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="map.js"></script>
+</body>
+</html> 

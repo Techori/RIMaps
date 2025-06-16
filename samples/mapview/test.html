@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSM API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>OSM API Test</h1>
+    
+    <div class="test-section">
+        <h2>Geocoding Test</h2>
+        <input type="text" id="address" placeholder="Enter address" value="New York">
+        <button onclick="testGeocode()">Test Geocode</button>
+        <pre id="geocodeResult"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Directions Test</h2>
+        <input type="text" id="origin" placeholder="Origin" value="New York">
+        <input type="text" id="destination" placeholder="Destination" value="Boston">
+        <button onclick="testDirections()">Test Directions</button>
+        <pre id="directionsResult"></pre>
+    </div>
+
+    <div class="test-section">
+        <h2>Nearby Places Test</h2>
+        <input type="text" id="lat" placeholder="Latitude" value="40.7128">
+        <input type="text" id="lng" placeholder="Longitude" value="-74.0060">
+        <input type="text" id="type" placeholder="Place type" value="restaurant">
+        <button onclick="testNearby()">Test Nearby Places</button>
+        <pre id="nearbyResult"></pre>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:3000/api';
+        const API_KEY = '56d2c2af9d93cb0368220fcb9d8b82e81fe27380d16de00861d1adc21e3b4f97';
+
+        async function testGeocode() {
+            const address = document.getElementById('address').value;
+            try {
+                const response = await fetch(`${API_BASE_URL}/geocode?address=${encodeURIComponent(address)}&provider=osm`, {
+                    headers: {
+                        'x-api-key': API_KEY
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('geocodeResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('geocodeResult').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function testDirections() {
+            const origin = document.getElementById('origin').value;
+            const destination = document.getElementById('destination').value;
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/directions?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&provider=osm`,
+                    {
+                        headers: {
+                            'x-api-key': API_KEY
+                        }
+                    }
+                );
+                const data = await response.json();
+                document.getElementById('directionsResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('directionsResult').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        async function testNearby() {
+            const lat = document.getElementById('lat').value;
+            const lng = document.getElementById('lng').value;
+            const type = document.getElementById('type').value;
+            try {
+                const response = await fetch(
+                    `${API_BASE_URL}/map/nearby?lat=${lat}&lng=${lng}&type=${encodeURIComponent(type)}&provider=osm`,
+                    {
+                        headers: {
+                            'x-api-key': API_KEY
+                        }
+                    }
+                );
+                const data = await response.json();
+                document.getElementById('nearbyResult').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('nearbyResult').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html> 

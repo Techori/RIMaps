@@ -10,16 +10,24 @@ class BaseController {
 
     // Helper method to validate provider
     validateProvider(provider, client) {
-        // If no provider specified, default to google
-        const selectedProvider = provider || 'google';
+        // If no provider specified, use the first allowed provider
+        if (!provider) {
+            if (!client || !client.allowedProviders || client.allowedProviders.length === 0) {
+                throw new ApiError(403, 'No providers available for your plan');
+            }
+            return client.allowedProviders[0];
+        }
 
         // If client exists and has allowed providers, validate against them
         if (client && client.allowedProviders && client.allowedProviders.length > 0) {
-            if (!client.allowedProviders.includes(selectedProvider)) {
-                throw new ApiError(403, `Provider '${selectedProvider}' is not allowed for your plan`);
+            if (!client.allowedProviders.includes(provider)) {
+                throw new ApiError(403, `Provider '${provider}' is not allowed for your plan. Available providers: ${client.allowedProviders.join(', ')}`);
             }
+        } else {
+            throw new ApiError(403, 'No providers available for your plan');
         }
-        return selectedProvider;
+
+        return provider;
     }
 
     // Helper method to handle service errors

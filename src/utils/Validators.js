@@ -201,6 +201,70 @@ class Validators {
             body('allowedProviders').optional().isArray().withMessage('Allowed providers must be an array')
         ]
     };
+
+    // Location validators
+    static location = {
+        // Validate location request
+        getLocation: [
+            query('query')
+                .notEmpty()
+                .withMessage('Location query is required')
+                .isString()
+                .withMessage('Query must be a string')
+                .trim()
+                .escape(),
+            query('provider')
+                .optional()
+                .isIn(['google', 'mapbox', 'osm'])
+                .withMessage('Provider must be one of: google, mapbox, osm')
+        ],
+
+        // Validate select location request
+        selectLocation: [
+            body('lat')
+                .notEmpty()
+                .withMessage('Latitude is required')
+                .isFloat({ min: -90, max: 90 })
+                .withMessage('Latitude must be between -90 and 90'),
+            body('lng')
+                .notEmpty()
+                .withMessage('Longitude is required')
+                .isFloat({ min: -180, max: 180 })
+                .withMessage('Longitude must be between -180 and 180'),
+            body('provider')
+                .optional()
+                .isIn(['google', 'mapbox', 'osm'])
+                .withMessage('Provider must be one of: google, mapbox, osm')
+        ],
+
+        // Validate nearby search request
+        searchNearby: [
+            query('lat')
+                .notEmpty()
+                .withMessage('Latitude is required')
+                .isFloat({ min: -90, max: 90 })
+                .withMessage('Latitude must be between -90 and 90'),
+            query('lng')
+                .notEmpty()
+                .withMessage('Longitude is required')
+                .isFloat({ min: -180, max: 180 })
+                .withMessage('Longitude must be between -180 and 180'),
+            query('radius')
+                .optional()
+                .isFloat({ min: 0, max: 50000 })
+                .withMessage('Radius must be between 0 and 50000 meters'),
+            query('type')
+                .optional()
+                .isString()
+                .withMessage('Type must be a string')
+                .trim()
+                .escape(),
+            query('provider')
+                .optional()
+                .isIn(['google', 'mapbox', 'osm'])
+                .withMessage('Provider must be one of: google, mapbox, osm')
+        ]
+    };
 }
 
 module.exports = Validators; 

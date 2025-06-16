@@ -2,7 +2,8 @@ const { ApiError } = require('./errorHandler');
 const Client = require('../models/Client');
 const QuotaUsage = require('../models/QuotaUsage');
 
-const publicRoutes = ['/api/clients/register', '/api/clients/login', '/api/clients/generate-key'];
+// Define public routes that don't require authentication
+const publicRoutes = ['/api/clients/register', '/api/clients/login'];
         
 const authenticateApiKey = async (req, res, next) => {
     try {
@@ -22,7 +23,7 @@ const authenticateApiKey = async (req, res, next) => {
         const client = await Client.findOne({ apiKey, isActive: true });
         
         if (!client) {
-            throw new ApiError(401, 'Invalid API key');
+            throw new ApiError(401, 'Incorrect credentials');
         }
 
         // Check if client has exceeded quota
